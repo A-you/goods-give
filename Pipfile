@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+flask = {index = "https://pypi.douban.com/simple/",version = "==0.12.2"}
+sqlalchemy = {index = "https://pypi.douban.com/simple/",version = "*"}
+flask-sqlalchemy = "*"
+jinja2 = "*"
+cymysql = "*"
+wtforms = "*"
+requests = "*"
+
+[requires]
+python_version = "3.6"
