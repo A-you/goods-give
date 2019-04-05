@@ -20,10 +20,7 @@ def register():
     # user.nickname = 'wwww'
         db.session.add(user)
         db.session.commit()
-    form = {
-        'data': 'ddd',
-        'nickname': 'ssddd'
-    }
+    form =form
     return render_template('auth/register.html', form=form)
 
 
