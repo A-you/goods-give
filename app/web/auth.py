@@ -4,12 +4,11 @@ from flask import render_template, request
 from app.forms.auth import RegisterForm
 from app.models.user import User
 
-__author__ = '七月'
+__author__ = '小尤'
 
 
 @web.route('/register', methods=['GET','POST'])
 def register():
-    print (request)
     form = RegisterForm(request.form)
     user = User()
     if request.method == 'POST' and form.validate():

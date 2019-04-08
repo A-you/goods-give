@@ -18,7 +18,7 @@ class RegisterForm(Form):
 		if User.query.filter_by(email= field.data).first():
 			raise ValidationError('电子邮件已被注册')
 
-	def validate_password(self, field):
+	def validate_nickname(self, field):
 		#可以通过db.session来查询,
 		if User.query.filter_by(email= field.data).first():
 			raise ValidationError('昵称已被占用')
