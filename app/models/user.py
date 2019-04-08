@@ -4,12 +4,13 @@
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from sqlalchemy.orm import relationship
 from app.models.base import Base
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 class User(Base):
 	#__tablename__ = 'user1'#更改表名
 	id = Column(Integer, primary_key=True)
-	_password = Column('password',String(128))
+	_password = Column('password',String(128), nullable=False)
 	nickname = Column(String(24), nullable=False)
 	phone_number = Column(String(18), unique=True)
 	email = Column(String(50), unique=True, nullable=False)
@@ -25,3 +26,6 @@ class User(Base):
 	@password.setter   #属性的写入
 	def password(self, raw):
 		self._password = generate_password_hash(raw)
+
+	def check_password(self,raw):
+		return check_password_hash(self._password,raw)
