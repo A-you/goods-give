@@ -22,3 +22,7 @@ class RegisterForm(Form):
 		#可以通过db.session来查询,
 		if User.query.filter_by(email= field.data).first():
 			raise ValidationError('昵称已被占用')
+
+class LoginForm(Form):
+	email = StringField(validators=[DataRequired(),Length(8,64), Email(message='电子邮箱不符合规范')])
+	password = PasswordField('密码', validators=[DataRequired(), Length(6, 20,message='密码长度不规范')])

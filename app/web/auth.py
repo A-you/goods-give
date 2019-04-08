@@ -1,6 +1,6 @@
 from app import db
 from . import web
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 from app.forms.auth import RegisterForm
 from app.models.user import User
 
@@ -19,18 +19,21 @@ def register():
     # user.nickname = 'wwww'
         db.session.add(user)
         db.session.commit()
+        return redirect(url_for('web.login'))
     form =form
     return render_template('auth/register.html', form=form)
 
 
 @web.route('/login', methods=['GET', 'POST'])
 def login():
-    pass
-
+    form = {
+        "data": ""
+    }
+    return render_template('auth/login.html', form=form)
 
 @web.route('/reset/password', methods=['GET', 'POST'])
 def forget_password_request():
-    pass
+   pass
 
 
 @web.route('/reset/password/<token>', methods=['GET', 'POST'])
