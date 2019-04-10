@@ -45,7 +45,7 @@ class User(UserMixin,Base):
 	def can_save_to_list(self,isbn):
 		if is_isbn_or_key(isbn) != 'isbn':
 			return False
-		yushu_book = YuShuBook(isbn)
+		yushu_book = YuShuBook()
 		yushu_book.search_by_isbn(isbn)
 		if not yushu_book.first:
 			return False
