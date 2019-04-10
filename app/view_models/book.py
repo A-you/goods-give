@@ -9,7 +9,7 @@ class BookViewModel:
 	def __init__(self,data):
 		self.title = data['title']
 		self.author = '、'.join(data['author'])
-		# self.binding = data['binding']
+		self.binding = data['binding']
 		self.publisher = data['publisher']
 		self.image = data['image']
 		self.price = '￥' + data['price'] if data['price'] else data['price']

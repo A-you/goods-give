@@ -4,6 +4,7 @@
 import json
 from flask import request, jsonify, make_response, render_template,flash
 
+from app.models.gift import Gift
 from app.view_models.book import BookViewModel, BookCollection
 from . import web
 from app.forms.book import SearchForm
@@ -42,7 +43,13 @@ def search():
 @web.route('/book/<isbn>/detail')
 # @cache.cached(timeout=1800)
 def book_detail(isbn):
+	has_in_gifts = False
+	has_in_wishes = False
+
 	yushu_book = YuShuBook()
 	yushu_book.search_by_isbn(isbn)
 	book = BookViewModel(yushu_book.first)
+	
+	trade_gifts = Gift.query.filter_by(isbn=isbn, launched=False).all()
+	trade_wishes = Gift.query.filter_by(isbn=isbn, launched=False).all()
 	return render_template('book_detail.html', book=book, wishes = [], gifts = [])
