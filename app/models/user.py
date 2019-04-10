@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 # @Time : 2019/4/3 22:07 
 # @Author : Ymy
+from app import login_manager
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from sqlalchemy.orm import relationship
 from app.models.base import Base
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 
-class User(Base):
+class User(UserMixin,Base):
+	"""
+	继承usermixin，其中cookie是用get_id来取，如果另需，可以重写这个方法
+	"""
 	#__tablename__ = 'user1'#更改表名
 	id = Column(Integer, primary_key=True)
 	_password = Column('password',String(128), nullable=False)
@@ -29,3 +34,8 @@ class User(Base):
 
 	def check_password(self,raw):
 		return check_password_hash(self._password,raw)
+
+#该方法在类的外面
+@login_manager.user_loader
+def get_user(uid):
+	return User.query.get(int(uid))

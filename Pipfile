@@ -13,6 +13,7 @@ jinja2 = "*"
 cymysql = "*"
 wtforms = "*"
 requests = "*"
+flask-login = "*"
 
 [requires]
 python_version = "3.6"

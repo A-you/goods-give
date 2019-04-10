@@ -3,6 +3,7 @@ from . import web
 from flask import render_template, request, redirect, url_for, make_response, flash
 from app.forms.auth import RegisterForm, LoginForm
 from app.models.user import User
+from flask_login import login_user
 
 __author__ = '小尤'
 
@@ -36,7 +37,11 @@ def login():
     if request.method == 'POST' and form.validate():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
-            pass
+            login_user(user,remember=True)
+            next = request.args.get('next')
+            if not next or next.startswith('/'):
+                next = url_for('web.index')
+            return redirect(next)
         else:
             flash('账号不存在')
     return render_template('auth/login.html', form=form)
