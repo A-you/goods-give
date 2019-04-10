@@ -15,6 +15,7 @@ def create_app(config=None):
 	app = Flask(__name__)
 	register_web_blueprint(app)
 	app.config.from_object('app.secure')
+	app.config.from_object('app.settings')
 	app.app_context()
 	db.init_app(app)
 	login_manager.init_app(app)
