@@ -33,3 +33,10 @@ class Base(db.Model):
 		for k ,v in attr.items():
 			if hasattr(self,k) and k != 'id':
 				setattr(self, k, v)
+
+	@property
+	def create_datetime(self):
+		if self.create_time:
+			return datetime.fromtimestamp(self.create_time)
+		else:
+			return None
