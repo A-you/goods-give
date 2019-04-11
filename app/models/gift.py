@@ -2,10 +2,11 @@
 # @Time : 2019/4/3 22:07 
 # @Author : Ymy
 from flask import current_app
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, desc,distinct
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, desc,distinct,func
 from sqlalchemy.orm import relationship
 
-from app.models.base import Base
+from app.models.base import Base, db
+from app.models.wish import Wish
 from app.spider.yushu_book import YuShuBook
 
 
@@ -32,6 +33,23 @@ class Gift(Base):
 	# gifter_id = Column(Integer)
 	# gift_id = Column(Integer)
 	# gifter_nickname = Column(String(20))
+
+	#查询用户的礼物清单
+	@classmethod
+	def get_user_gifts(cls, uid):
+		gifts = Gift.query.filter_by(uid=uid, launched=False).order_by(desc(Gift.create_time)).all()
+		return gifts
+
+	#根据isbn列表查询相关送的人和想要的人
+	@classmethod
+	def get_wish_counts(cls, isbn_list):
+		#filter和filter_by不同，filter需要接收表达式，filter_by接收关键字参数
+		#需要用到mysql 的in查询来处理isbn_list
+		#query中传入的数据机构能等查询出来的数据结构,func.count可以统计个数，结构为[(个数,isbn),(个数,isbn).......]
+		count_list = db.session.query(func.count(Wish.id),Wish.isbn).filter(Wish.launched == False,
+		                              Wish.isbn.in_(isbn_list),
+		                              Wish.status ==1).group_by(Wish.isbn).all()
+		pass
 
 	@property
 	def book(self):
