@@ -3,7 +3,7 @@
 # @Author : Ymy
 from datetime import datetime
 
-from flask_sqlalchemy import SQLAlchemy as _SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy as _SQLAlchemy,BaseQuery
 from sqlalchemy import Column, SmallInteger, Integer
 from contextlib import contextmanager
 
@@ -19,7 +19,14 @@ class SQLAlchemy(_SQLAlchemy):
 			db.session.rollback()
 			raise e
 
-db = SQLAlchemy()
+class Query(BaseQuery):
+	def filter_by(self, **kwargs):
+		if 'status' not  in kwargs.keys():
+			kwargs['status'] = 1
+		return  super(Query,self).filter_by(**kwargs)
+
+#	flask_sqlalchemy中预留了替换Query的参数query_class
+db = SQLAlchemy(query_class=Query)
 
 class Base(db.Model):
 	__abstract__ = True   #添加了这个属性,，就不用添加主键，否则sqlalchemy会以为我们要创建表，必须有主键
