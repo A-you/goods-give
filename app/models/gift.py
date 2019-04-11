@@ -8,6 +8,9 @@ from sqlalchemy.orm import relationship
 from app.models.base import Base, db
 from app.models.wish import Wish
 from app.spider.yushu_book import YuShuBook
+from collections import namedtuple #用于快速定义对象
+
+EachGiftWishCount = namedtuple('EachGiftWishCount',['count','isbn'])
 
 
 class Gift(Base):
@@ -45,11 +48,13 @@ class Gift(Base):
 	def get_wish_counts(cls, isbn_list):
 		#filter和filter_by不同，filter需要接收表达式，filter_by接收关键字参数
 		#需要用到mysql 的in查询来处理isbn_list
-		#query中传入的数据机构能等查询出来的数据结构,func.count可以统计个数，结构为[(个数,isbn),(个数,isbn).......]
+		#query中传入的数据机构能等查询出来的数据结构,func.count可以统计个数
+		# 加上group_by就是分组统计，结构为[(个数,isbn),(个数,isbn).......]
 		count_list = db.session.query(func.count(Wish.id),Wish.isbn).filter(Wish.launched == False,
 		                              Wish.isbn.in_(isbn_list),
 		                              Wish.status ==1).group_by(Wish.isbn).all()
-		pass
+		count_list = [EachGiftWishCount(w[0],w[1]) for w in count_list]
+		return count_list
 
 	@property
 	def book(self):
