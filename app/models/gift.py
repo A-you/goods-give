@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 # @Time : 2019/4/3 22:07 
 # @Author : Ymy
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from flask import current_app
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, desc,distinct
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base
+from app.spider.yushu_book import YuShuBook
+
+
 class Gift(Base):
 	"""
 	礼物模型
@@ -28,3 +32,20 @@ class Gift(Base):
 	# gifter_id = Column(Integer)
 	# gift_id = Column(Integer)
 	# gifter_nickname = Column(String(20))
+
+	@property
+	def book(self):
+		yushu_book = YuShuBook()
+		yushu_book.search_by_isbn(self.isbn)
+		return yushu_book.first
+
+	#对象代表一个礼物，具体
+	#类是一个事物，是抽象的
+	@classmethod
+	def recent(self):
+		#链式调用，主体是query
+		recent_gift = Gift.query.filter_by(
+			launched=False).order_by(
+			desc(Gift.create_time)).limit(
+			current_app.config['RECENT_BOOK_COUNT']).all()
+		return recent_gift
