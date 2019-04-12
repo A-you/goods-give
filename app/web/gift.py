@@ -1,7 +1,8 @@
-from flask import current_app, flash
+from flask import current_app, flash, render_template
 
 from app import db
 from app.models.gift import Gift
+from app.view_models.gitf import MyGifts
 from . import web
 from flask_login import login_required, current_user
 __author__ = '七月'
@@ -13,9 +14,9 @@ def my_gifts():
     uid = current_user.id
     gifts_of_my = Gift.get_user_gifts(uid)
     isbn_list = [gift.isbn for gift in gifts_of_my]
-    Gift.get_wish_counts(isbn_list)
-
-    return 'hello,gifts'
+    wish_count_list = Gift.get_wish_counts(isbn_list)
+    view_model = MyGifts(gifts_of_my,wish_count_list)
+    return render_template('my_gifts.html', gifts = view_model.gifts)
 
 
 @web.route('/gifts/book/<isbn>')

@@ -48,7 +48,7 @@ def login():
 
 @web.route('/reset/password', methods=['GET', 'POST'])
 def forget_password_request():
-   pass
+   return render_template('auth/forget_password_request.html')
 
 
 @web.route('/reset/password/<token>', methods=['GET', 'POST'])
