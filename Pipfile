@@ -14,6 +14,8 @@ cymysql = "*"
 wtforms = "*"
 requests = "*"
 flask-login = "*"
+flask-mail = "*"
+itsdangerous = "*"
 
 [requires]
 python_version = "3.6"
