@@ -67,6 +67,12 @@ class User(UserMixin,Base):
 
 		pass
 
+	def can_send_drift(self):
+		"""
+		判断是否符合鱼豆大于1，且是否满足索取两本书必须送出一本书
+		:return:
+		"""
+
 
 	@staticmethod
 	def reset_password(token, new_password):

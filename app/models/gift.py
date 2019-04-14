@@ -36,6 +36,10 @@ class Gift(Base):
 	# gift_id = Column(Integer)
 	# gifter_nickname = Column(String(20))
 
+	def is_yourself_gift(self,uid):
+		return True if self.uid == uid   else False
+
+
 	#查询用户的礼物清单
 	@classmethod
 	def get_user_gifts(cls, uid):
