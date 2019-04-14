@@ -6,7 +6,7 @@ class PendingStatus(Enum):
 	"""
 	交易状态
 	"""
-	waiting = 1
-	success = 2
-	reject = 3
-	redraw = 4
+	Waiting = 1
+	Success = 2
+	Reject = 3
+	Redraw = 4
