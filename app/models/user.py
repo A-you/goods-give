@@ -79,7 +79,7 @@ class User(UserMixin,Base):
 		if self.beans < 1:
 			return False
 		success_gifts_count = Gift.query.filter_by(uid=self.id, launched = True).count()
-		success_receive_count = Drift.query.filter_by(requester = self.id, pending=PendingStatus.Success).count()
+		success_receive_count = Drift.query.filter_by(requester_id = self.id, pending=PendingStatus.Success).count()
 		return True if \
 			floor(success_receive_count)/2 <= floor(success_gifts_count) \
 			else False

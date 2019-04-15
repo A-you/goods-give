@@ -68,5 +68,5 @@ def book_detail(isbn):
 	trade_wishes_model = TradeInfo(trade_wishes)
 
 	return render_template('book_detail.html', book=book,
-	                       wishes = trade_gifts_model , gifts = trade_wishes_model,
+	                       wishes = trade_wishes_model  , gifts = trade_gifts_model,
 	                       has_in_gifts = has_in_gifts, has_in_wishes=has_in_wishes)

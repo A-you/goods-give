@@ -8,6 +8,7 @@ from app.libs.mail import send_mail
 from app.models.drift import Drift
 from app.models.gift import Gift
 from app.view_models.book import BookViewModel
+from app.view_models.drift import DriftCollection
 from . import web
 
 __author__ = '七月'
@@ -35,12 +36,14 @@ def send_drift(gid):
         send_mail(current_gift.user.email, '有人想要一本书', 'email/get_gift.html',
                    wisher=current_user,
                    gift=current_gift)
-        return redirect('web.pending')
+        return redirect(url_for('web.pending'))
     return render_template('drift.html', gifter = gifter, user_beans = current_user.beans, form=form)
 
 @web.route('/pending')
 def pending():
-    drifts = Drift.query.filter(or_(Drift.requester_id==current_user.id, Drift.gifter_id==current_user.id)).order_by(desc(Drift.create_time))
+    drifts = Drift.query.filter(or_(Drift.requester_id==current_user.id, Drift.gifter_id==current_user.id)).order_by(desc(Drift.create_time)).all()
+    views = DriftCollection(drifts, current_user.id)
+    return render_template('pending.html', drifts = views.data)
 
 
 @web.route('/drift/<int:did>/reject')
@@ -72,7 +75,7 @@ def save_drift(drift_form, current_gift):
         book = BookViewModel(current_gift.book)
         drift.book_title = book.title
         drift.book_author = book.author
-        drift.book_img = book.image
+        drift.book_ima = book.image
         drift.isbn = book.isbn
         try:
             current_user.beans -= 1
