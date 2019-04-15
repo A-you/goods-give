@@ -3,6 +3,10 @@
 # @Author : Ymy
 from app import create_app
 app = create_app()
+
+@app.errorhandler(404)
+def page_404(er):
+	return '这个页面是不存在的，别乱访问'
 #
 #
 # #搬迁到app文件夹下
